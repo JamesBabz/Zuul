@@ -34,23 +34,47 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, den, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom ;
       
         // create the rooms
-        outside = new Room("outside the main entrance of the university");
-        theater = new Room("in a lecture theater");
-        pub = new Room("in the campus pub");
-        lab = new Room("in a computing lab");
-        office = new Room("in the computing admin office");
+        
+        //Start
+        town = new Room("inside the town");
+        
+        //Wilderness areas
+        wilderness1 = new Room("out in the wilderness");
+        wilderness2 = new Room("out in the wilderness");
+        wilderness3 = new Room("out in the wilderness");
+        wilderness4 = new Room("out in the wilderness");
+        wilderness5 = new Room("out in the wilderness");
+        den = new Room("at the entrance of a den"); // Wilderness with den
+        
+        //Cave areas
+        cave1 = new Room("at the exit of the den");
+        cave2 = new Room("inside the cave");
+        cave3 = new Room("inside the cave");
+        cave4 = new Room("inside the cave");
+        cave5 = new Room("inside the cave");
+        cave6 = new Room("inside the cave");
+        chestRoom = new Room("in a room with a golden chest");
         
         // initialise room exits
-        outside.setExits(null, theater, lab, pub);
-        theater.setExits(null, null, null, outside);
-        pub.setExits(null, outside, null, null);
-        lab.setExits(outside, office, null, null);
-        office.setExits(null, null, null, lab);
+        town.setExits(null, wilderness1, null, null);
+        wilderness1.setExits(null, null, wilderness2, town);
+        wilderness2.setExits(wilderness1, wilderness3, wilderness4, null);
+        wilderness3.setExits(null, den, wilderness5, wilderness2);
+        wilderness4.setExits(wilderness2, wilderness5, null, null);
+        wilderness5.setExits(wilderness3, null, null, wilderness4);
+        den.setExits(null, null, cave1, wilderness3);
+        cave1.setExits(den, cave2, cave4, null);
+        cave2.setExits(cave1, null, null, cave3);
+        cave3.setExits(null, null, cave2, null);
+        cave4.setExits(cave1, null, cave6, cave5);
+        cave5.setExits(null, cave4, null, null);
+        cave6.setExits(cave4, chestRoom, null, null);
+        chestRoom.setExits(null, null, null, cave6);
 
-        currentRoom = outside;  // start game outside
+        currentRoom = town;  // start game outside
     }
 
     /**

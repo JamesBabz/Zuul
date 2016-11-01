@@ -93,20 +93,6 @@ public class Game {
         cave6.setExit("east", chestRoom);
         chestRoom.setExit("west", cave6);
 
-//        town.setExits(null, wilderness1, null, null);
-//        wilderness1.setExits(null, null, wilderness2, town);
-//        wilderness2.setExits(wilderness1, wilderness3, wilderness4, null);
-//        wilderness3.setExits(null, den, wilderness5, wilderness2);
-//        wilderness4.setExits(wilderness2, wilderness5, null, null);
-//        wilderness5.setExits(wilderness3, null, null, wilderness4);
-//        den.setExits(null, null, cave1, wilderness3);
-//        cave1.setExits(den, cave2, cave4, null);
-//        cave2.setExits(cave1, null, null, cave3);
-//        cave3.setExits(null, null, cave2, null);
-//        cave4.setExits(cave1, null, cave6, cave5);
-//        cave5.setExits(null, cave4, null, null);
-//        cave6.setExits(cave4, chestRoom, null, null);
-//        chestRoom.setExits(null, null, null, cave6);
         currentRoom = town;  // start game outside
     }
 
@@ -193,7 +179,7 @@ public class Game {
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        parser.showCommands();
+        System.out.println(parser.showCommands());
     }
 
     /**

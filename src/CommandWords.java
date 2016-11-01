@@ -45,14 +45,15 @@ public class CommandWords {
     }
 
     /**
-     * Print all valid commands to System.out.
+     * Gets all valid commands to System.out.
      */
-    public void showAll()
+    public String getCommandList()
     {
+        String returnString = "";
         for (String command : validCommands)
         {
-            System.out.print(command + " ");
+            returnString += command + " ";
         }
-        System.out.println();
+        return returnString;
     }
 }

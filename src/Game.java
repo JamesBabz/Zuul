@@ -35,7 +35,7 @@ public class Game {
      */
     private void createRooms()
     {
-        Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, den, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
+        Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
         // create the rooms
         //Start
@@ -47,10 +47,12 @@ public class Game {
         wilderness3 = new Room("out in the wilderness");
         wilderness4 = new Room("out in the wilderness");
         wilderness5 = new Room("out in the wilderness");
-        den = new Room("at the entrance of a den"); // Wilderness with den
+        wilderness6 = new Room("out in the wilderness");
+        denOutside = new Room("out in the wilderness near an entrance to a den"); // Wilderness with den
 
         //Cave areas
-        cave1 = new Room("at the exit of the den");
+        denInside = new Room("at the exit of the den"); // Start of the den
+        cave1 = new Room("ainside the cave");
         cave2 = new Room("inside the cave");
         cave3 = new Room("inside the cave");
         cave4 = new Room("inside the cave");
@@ -59,20 +61,53 @@ public class Game {
         chestRoom = new Room("in a room with a golden chest");
 
         // initialise room exits
-        town.setExits(null, wilderness1, null, null);
-        wilderness1.setExits(null, null, wilderness2, town);
-        wilderness2.setExits(wilderness1, wilderness3, wilderness4, null);
-        wilderness3.setExits(null, den, wilderness5, wilderness2);
-        wilderness4.setExits(wilderness2, wilderness5, null, null);
-        wilderness5.setExits(wilderness3, null, null, wilderness4);
-        den.setExits(null, null, cave1, wilderness3);
-        cave1.setExits(den, cave2, cave4, null);
-        cave2.setExits(cave1, null, null, cave3);
-        cave3.setExits(null, null, cave2, null);
-        cave4.setExits(cave1, null, cave6, cave5);
-        cave5.setExits(null, cave4, null, null);
-        cave6.setExits(cave4, chestRoom, null, null);
-        chestRoom.setExits(null, null, null, cave6);
+        town.setExit("east", wilderness1);
+        wilderness1.setExit("south", wilderness2);
+        wilderness1.setExit("west", town);
+        wilderness2.setExit("north", wilderness1);
+        wilderness2.setExit("east", wilderness3);
+        wilderness2.setExit("south", wilderness4);
+        wilderness3.setExit("east", denOutside);
+        wilderness3.setExit("south", wilderness5);
+        wilderness3.setExit("west", wilderness2);
+        wilderness4.setExit("north", wilderness2);
+        wilderness4.setExit("east", wilderness5);
+        wilderness5.setExit("north", wilderness3);
+        wilderness5.setExit("west", wilderness4);
+        wilderness6.setExit("south", denOutside);
+        denOutside.setExit("north", wilderness6);
+        denOutside.setExit("west", wilderness3);
+        denOutside.setExit("down", denInside);
+        denInside.setExit("up", denOutside);
+        denInside.setExit("south", cave1);
+        cave1.setExit("north", denInside);
+        cave1.setExit("east", cave2);
+        cave1.setExit("south", cave4);
+        cave2.setExit("north", cave1);
+        cave2.setExit("west", cave3);
+        cave3.setExit("south", cave2);
+        cave4.setExit("north", cave1);
+        cave4.setExit("south", cave6);
+        cave4.setExit("west", cave5);
+        cave5.setExit("east", cave4);
+        cave6.setExit("north", cave4);
+        cave6.setExit("east", chestRoom);
+        chestRoom.setExit("west", cave6);
+        
+//        town.setExits(null, wilderness1, null, null);
+//        wilderness1.setExits(null, null, wilderness2, town);
+//        wilderness2.setExits(wilderness1, wilderness3, wilderness4, null);
+//        wilderness3.setExits(null, den, wilderness5, wilderness2);
+//        wilderness4.setExits(wilderness2, wilderness5, null, null);
+//        wilderness5.setExits(wilderness3, null, null, wilderness4);
+//        den.setExits(null, null, cave1, wilderness3);
+//        cave1.setExits(den, cave2, cave4, null);
+//        cave2.setExits(cave1, null, null, cave3);
+//        cave3.setExits(null, null, cave2, null);
+//        cave4.setExits(cave1, null, cave6, cave5);
+//        cave5.setExits(null, cave4, null, null);
+//        cave6.setExits(cave4, chestRoom, null, null);
+//        chestRoom.setExits(null, null, null, cave6);
 
         currentRoom = town;  // start game outside
     }
@@ -186,8 +221,8 @@ public class Game {
 
     private void printLocationInfo()
     {
-        System.out.println("You are " + currentRoom.getDescription());
-        System.out.println(currentRoom.getExitString());
+//        System.out.println("You are " + currentRoom.getDescription());
+        System.out.println(currentRoom.getLongDescription());
     }
 
     /**

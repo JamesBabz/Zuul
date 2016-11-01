@@ -15,7 +15,6 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
-
 public class Game {
 
     private Parser parser;
@@ -93,7 +92,7 @@ public class Game {
         cave6.setExit("north", cave4);
         cave6.setExit("east", chestRoom);
         chestRoom.setExit("west", cave6);
-        
+
 //        town.setExits(null, wilderness1, null, null);
 //        wilderness1.setExits(null, null, wilderness2, town);
 //        wilderness2.setExits(wilderness1, wilderness3, wilderness4, null);
@@ -108,7 +107,6 @@ public class Game {
 //        cave5.setExits(null, cave4, null, null);
 //        cave6.setExits(cave4, chestRoom, null, null);
 //        chestRoom.setExits(null, null, null, cave6);
-
         currentRoom = town;  // start game outside
     }
 
@@ -168,6 +166,14 @@ public class Game {
         {
             goRoom(command);
         }
+        else if (commandWord.equals("look"))
+        {
+            look();
+        }
+        else if (commandWord.equals("eat"))
+        {
+            eat();
+        }
         else if (commandWord.equals("quit"))
         {
             wantToQuit = quit(command);
@@ -187,7 +193,7 @@ public class Game {
         System.out.println("around at the university.");
         System.out.println();
         System.out.println("Your command words are:");
-        System.out.println("   go quit help");
+        parser.showCommands();
     }
 
     /**
@@ -242,5 +248,15 @@ public class Game {
         {
             return true;  // signal that we want to quit
         }
+    }
+
+    private void look()
+    {
+        System.out.println(currentRoom.getLongDescription());
+    }
+
+    private void eat()
+    {
+        System.out.println("You have eaten and is now saturated");
     }
 }

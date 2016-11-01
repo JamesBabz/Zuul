@@ -1,38 +1,57 @@
 
 import java.util.Stack;
 
-
 /**
- *  This class is the main class of the "World of Zuul" application.
- *  "World of Zuul" is a very simple, text based adventure game.  Users
- *  can walk around some scenery. That's all. It should really be extended
- *  to make it more interesting!
+ * This class is the main class of the "World of Zuul" application. "World of
+ * Zuul" is a very simple, text based adventure game. Users can walk around some
+ * scenery. That's all. It should really be extended to make it more
+ * interesting!
  *
- *  To play this game, create an instance of this class and call the "play"
- *  method.
+ * To play this game, create an instance of this class and call the "play"
+ * method.
  *
- *  This main class creates and initialises all the others: it creates all
- *  rooms, creates the parser and starts the game.  It also evaluates and
- *  executes the commands that the parser returns.
+ * This main class creates and initialises all the others: it creates all rooms,
+ * creates the parser and starts the game. It also evaluates and executes the
+ * commands that the parser returns.
  *
- * @author  Michael Kölling and David J. Barnes
+ * @author Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
 public class Game {
 
+    public static final String ANSI_RESET = "\u001B[0m";
+
     private Parser parser;
-    private Room currentRoom;
+//    private Room currentRoom;
     private Room lastRoom;
     private Stack<Room> backList;
+    private Player player;
+    Item club, axe, rareClub;
+    Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
     /**
      * Create the game and initialise its internal map.
      */
     public Game()
     {
+        player = new Player("James", "Sorceress", 1);
+        createItems();
         createRooms();
+        placeItems();
         parser = new Parser();
         backList = new Stack();
+    }
+
+    /**
+     *
+     */
+    private void createItems()
+    {
+
+        // Create the items        
+        club = new Item("club", "a", "This is a club", 2, "common");
+        axe = new Item("axe", "an", "This is an axe", 3, "common");
+        rareClub = new Item("club", "a", "This is a rare club", 2, "rare");
     }
 
     /**
@@ -40,12 +59,10 @@ public class Game {
      */
     private void createRooms()
     {
-        // create the rooms
-        Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
         // Start
         town = new Room("inside the town");
-        currentRoom = town;  // start game in town
+        player.currentRoom = town;  // start game in town
 
         //Wilderness areas
         wilderness1 = new Room("out in the wilderness");
@@ -99,12 +116,13 @@ public class Game {
         cave6.setExit("north", cave4);
         cave6.setExit("east", chestRoom);
         chestRoom.setExit("west", cave6);
+    }
 
-        // Create the items        
-        Item club = new Item("club", "a", "This is a club", 2);
-        Item axe = new Item("axe", "an", "this is an axe", 3);
-        Item rareClub = new Item("rare club", "a", "this is a rare club", 2);
-
+    /**
+     *
+     */
+    private void placeItems()
+    {
         // Set items in the rooms
         wilderness6.addItem(club);
         wilderness1.addItem(rareClub);
@@ -180,6 +198,14 @@ public class Game {
         {
             back();
         }
+        else if (commandWord.equals("take"))
+        {
+            take(command);
+        }
+        else if (commandWord.equals("drop"))
+        {
+            drop(command);
+        }
         else if (commandWord.equals("quit"))
         {
             wantToQuit = quit(command);
@@ -218,7 +244,7 @@ public class Game {
         String direction = command.getSecondWord();
 
         // Try to leave current room.
-        Room nextRoom = currentRoom.getExit(direction);
+        Room nextRoom = player.currentRoom.getExit(direction);
 
         if (nextRoom == null)
         {
@@ -226,15 +252,15 @@ public class Game {
         }
         else
         {
-            backList.push(currentRoom);
-            currentRoom = nextRoom;
+            backList.push(player.currentRoom);
+            player.currentRoom = nextRoom;
             printLocationInfo();
         }
     }
 
     private void printLocationInfo()
     {
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.currentRoom.getLongDescription());
     }
 
     /**
@@ -258,7 +284,7 @@ public class Game {
 
     private void look()
     {
-        System.out.println(currentRoom.getLongDescription());
+        System.out.println(player.currentRoom.getLongDescription());
     }
 
     private void eat()
@@ -274,8 +300,38 @@ public class Game {
         }
         else
         {
-            currentRoom = backList.pop();
+            player.currentRoom = backList.pop();
             printLocationInfo();
         }
+    }
+
+    /**
+     *
+     */
+    public void take(Command command)
+    {
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to take...
+            System.out.println("Take what?");
+            return;
+        }
+        String item = command.getSecondWord();
+        player.pickUpItem(item);
+    }
+
+    /**
+     *
+     */
+    public void drop(Command command)
+    {
+        if (!command.hasSecondWord())
+        {
+            // if there is no second word, we don't know what to take...
+            System.out.println("Drop what?");
+            return;
+        }
+        String item = command.getSecondWord();
+        player.dropItem(item);
     }
 }

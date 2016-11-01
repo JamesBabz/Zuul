@@ -57,6 +57,14 @@ public class Room {
     {
         items.add(item);
     }
+
+    public List<Item> getItems()
+    {
+        return items;
+    }
+     
+     
+     
     
 
     
@@ -105,10 +113,10 @@ public class Room {
     
     public String getAllItems()
     {
-        String itemText = ".\nThere is " + items.get(0).getPrefix() + " " + items.get(0).getName();
+        String itemText = ".\nThere is " + items.get(0).getPrefix() + " " + items.get(0).getColor() + items.get(0).getName() + Game.ANSI_RESET;
             for (int i = 1; i < items.size(); i++)
             {
-                itemText = itemText + " and " + items.get(i).getPrefix() + " " + items.get(i).getName();
+                itemText = itemText + " and " + items.get(i).getPrefix() + " " + items.get(i).getColor() + items.get(i).getName() + Game.ANSI_RESET;
             }
             itemText = itemText + " on the ground";
             return itemText;

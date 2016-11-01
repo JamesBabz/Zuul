@@ -13,13 +13,13 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
+import java.util.HashMap;
+import java.util.Set;
+
 public class Room {
 
     private String description;
-    private Room northExit;
-    private Room southExit;
-    private Room eastExit;
-    private Room westExit;
+    private HashMap<String, Room> exits;
 
     /**
      * Create a room described "description". Initially, it has no exits.
@@ -30,85 +30,40 @@ public class Room {
     public Room(String description)
     {
         this.description = description;
+        exits = new HashMap<String, Room>();
     }
 
     /**
-     * Define the exits of this room. Every direction either leads to another
-     * room or is null (no exit there).
+     * Define an exit from this room.
      *
-     * @param north The north exit.
-     * @param east The east east.
-     * @param south The south exit.
-     * @param west The west exit.
+     * @param direction The direction of the exit.
+     * @param neighbor The room in the given direction.
      */
-    public void setExits(Room north, Room east, Room south, Room west)
+    public void setExit(String direction, Room neighbor)
     {
-        if (north != null)
-        {
-            northExit = north;
-        }
-        if (east != null)
-        {
-            eastExit = east;
-        }
-        if (south != null)
-        {
-            southExit = south;
-        }
-        if (west != null)
-        {
-            westExit = west;
-        }
+        exits.put(direction, neighbor);
     }
 
     public Room getExit(String direction)
     {
-        if (direction.equals("north"))
-        {
-            return northExit;
-        }
-        if (direction.equals("east"))
-        {
-            return eastExit;
-        }
-        if (direction.equals("south"))
-        {
-            return southExit;
-        }
-        if (direction.equals("west"))
-        {
-            return westExit;
-        }
-        return null;
+        return exits.get(direction);
     }
 
     /**
-     * Return a description of the room’s exits, for example, "Exits: north
+     * Return a description of the room’s exits, for example "Exits: north
      * west".
      *
      * @return A description of the available exits.
      */
     public String getExitString()
     {
-        String text = "Exits: ";
-        if (getExit("north") != null)
+        String returnString = "Exits:";
+        Set<String> keys = exits.keySet();
+        for (String exit : keys)
         {
-            text = text + "north ";
+            returnString += " " + exit;
         }
-        if (getExit("east") != null)
-        {
-            text = text + "east ";
-        }
-        if (getExit("south") != null)
-        {
-            text = text + "south ";
-        }
-        if (getExit("west") != null)
-        {
-            text = text + "west ";
-        }
-        System.out.println();
-        return text;
+        return returnString;
     }
 
     /**
@@ -117,6 +72,17 @@ public class Room {
     public String getDescription()
     {
         return description;
+    }
+
+    /**
+     * Return a long description of this room, of the form: You are in the
+     * kitchen. Exits: north west
+     *
+     * @return A description of the room, including exits.
+     */
+    public String getLongDescription()
+    {
+        return "You are " + description + ".\n" + getExitString();
     }
 
 }

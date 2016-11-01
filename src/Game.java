@@ -1,4 +1,7 @@
 
+import java.util.Stack;
+
+
 /**
  *  This class is the main class of the "World of Zuul" application.
  *  "World of Zuul" is a very simple, text based adventure game.  Users
@@ -19,6 +22,8 @@ public class Game {
 
     private Parser parser;
     private Room currentRoom;
+    private Room lastRoom;
+    private Stack<Room> backList;
 
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +32,7 @@ public class Game {
     {
         createRooms();
         parser = new Parser();
+        backList = new Stack();
     }
 
     /**
@@ -34,11 +40,12 @@ public class Game {
      */
     private void createRooms()
     {
+        // create the rooms
         Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
-        // create the rooms
-        //Start
+        // Start
         town = new Room("inside the town");
+        currentRoom = town;  // start game in town
 
         //Wilderness areas
         wilderness1 = new Room("out in the wilderness");
@@ -93,7 +100,16 @@ public class Game {
         cave6.setExit("east", chestRoom);
         chestRoom.setExit("west", cave6);
 
-        currentRoom = town;  // start game outside
+        // Create the items        
+        Item club = new Item("club", "a", "This is a club", 2);
+        Item axe = new Item("axe", "an", "this is an axe", 3);
+        Item rareClub = new Item("rare club", "a", "this is a rare club", 2);
+
+        // Set items in the rooms
+        wilderness6.addItem(club);
+        wilderness1.addItem(rareClub);
+        wilderness1.addItem(axe);
+
     }
 
     /**
@@ -160,6 +176,10 @@ public class Game {
         {
             eat();
         }
+        else if (commandWord.equals("back"))
+        {
+            back();
+        }
         else if (commandWord.equals("quit"))
         {
             wantToQuit = quit(command);
@@ -206,6 +226,7 @@ public class Game {
         }
         else
         {
+            backList.push(currentRoom);
             currentRoom = nextRoom;
             printLocationInfo();
         }
@@ -213,7 +234,6 @@ public class Game {
 
     private void printLocationInfo()
     {
-//        System.out.println("You are " + currentRoom.getDescription());
         System.out.println(currentRoom.getLongDescription());
     }
 
@@ -244,5 +264,18 @@ public class Game {
     private void eat()
     {
         System.out.println("You have eaten and is now saturated");
+    }
+
+    private void back()
+    {
+        if (backList.empty())
+        {
+            System.out.println("You cannot go back from here");
+        }
+        else
+        {
+            currentRoom = backList.pop();
+            printLocationInfo();
+        }
     }
 }

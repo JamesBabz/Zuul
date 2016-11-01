@@ -13,13 +13,16 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2011.07.31
  */
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class Room {
 
     private String description;
     private HashMap<String, Room> exits;
+    private List<Item> items;
 
     /**
      * Create a room described "description". Initially, it has no exits.
@@ -31,6 +34,7 @@ public class Room {
     {
         this.description = description;
         exits = new HashMap<String, Room>();
+        items = new ArrayList<>();
     }
 
     /**
@@ -48,7 +52,15 @@ public class Room {
     {
         return exits.get(direction);
     }
+    
+     void addItem(Item item)
+    {
+        items.add(item);
+    }
+    
 
+    
+    
     /**
      * Return a description of the room’s exits, for example "Exits: north
      * west".
@@ -82,7 +94,24 @@ public class Room {
      */
     public String getLongDescription()
     {
-        return "You are " + description + ".\n" + getExitString();
+        String returnString = "You are " + description;
+        if(!items.isEmpty())
+        {
+            returnString = returnString + getAllItems();
+        }
+        returnString = returnString + ".\n" + getExitString();
+        return returnString;
     }
-
+    
+    public String getAllItems()
+    {
+        String itemText = ".\nThere is " + items.get(0).getPrefix() + " " + items.get(0).getName();
+            for (int i = 1; i < items.size(); i++)
+            {
+                itemText = itemText + " and " + items.get(i).getPrefix() + " " + items.get(i).getName();
+            }
+            itemText = itemText + " on the ground";
+            return itemText;
+    }
+ 
 }

@@ -1,3 +1,7 @@
+
+import java.util.HashMap;
+import java.util.List;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -24,16 +28,20 @@ public class Item {
     private String name;
     private String prefix;
     private String description;
-    private double weight;
+    private int weight;
     private String rarity;
     private String rarityColor;
+    private boolean eatable;
+    private HashMap<String, Integer> stats;
 
-    public Item(String name, String prefix, String description, double weight, String rarity)
+    public Item(String name, String prefix, String description, int weight, String rarity, boolean eatable)
     {
         this.name = name;
         this.prefix = prefix;
         this.description = description;
         this.weight = weight;
+        this.eatable = eatable;
+        stats = new HashMap<String, Integer>();
         setRarity(rarity);
     }
 
@@ -52,11 +60,26 @@ public class Item {
         return description;
     }
 
-    public double getWeight()
+    public int getWeight()
     {
         return weight;
     }
 
+    public boolean isEatable()
+    {
+        return eatable;
+    }
+
+    public HashMap<String, Integer> getStats()
+    {
+        return stats;
+    }
+
+    public void setStats(String stat, int change)
+    {
+        stats.put(stat, change);
+    }
+    
     public String getRarity()
     {
         return rarity;

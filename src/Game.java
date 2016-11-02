@@ -1,4 +1,5 @@
 
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -26,7 +27,7 @@ public class Game {
     private Room lastRoom;
     private Stack<Room> backList;
     private Player player;
-    Item club, axe, rareClub;
+    Item club, axe, rareClub, cookie;
     Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
     /**
@@ -49,9 +50,12 @@ public class Game {
     {
 
         // Create the items        
-        club = new Item("club", "a", "This is a club", 2, "common");
-        axe = new Item("axe", "an", "This is an axe", 3, "common");
-        rareClub = new Item("club", "a", "This is a rare club", 2, "rare");
+        club = new Item("club", "a", "This is a club", 2, "common", false);
+        axe = new Item("axe", "an", "This is an axe", 3, "common", false);
+        rareClub = new Item("club", "a", "This is a rare club", 2, "rare", false);
+        cookie = new Item("cookie", "a", "This is a magic cookie", 0, "epic", true);
+        cookie.setStats("maxWeight", 2);
+        cookie.setStats("hitPoints", -20);
     }
 
     /**
@@ -127,6 +131,7 @@ public class Game {
         wilderness6.addItem(club);
         wilderness1.addItem(rareClub);
         wilderness1.addItem(axe);
+        town.addItem(cookie);
 
     }
 
@@ -192,7 +197,7 @@ public class Game {
         }
         else if (commandWord.equals("eat"))
         {
-            eat();
+            eat(command);
         }
         else if (commandWord.equals("back"))
         {
@@ -205,6 +210,10 @@ public class Game {
         else if (commandWord.equals("drop"))
         {
             drop(command);
+        }
+        else if (commandWord.equals("items"))
+        {
+            items();
         }
         else if (commandWord.equals("quit"))
         {
@@ -285,11 +294,20 @@ public class Game {
     private void look()
     {
         System.out.println(player.currentRoom.getLongDescription());
+        System.out.println(player.getMaxWeight());
     }
 
-    private void eat()
+    private void eat(Command command)
     {
-        System.out.println("You have eaten and is now saturated");
+         if (!command.hasSecondWord())
+        {
+            System.out.println("Eat what?");
+        }
+        else
+        {
+            String item = command.getSecondWord();
+            player.eat(item);
+        }
     }
 
     private void back()
@@ -327,11 +345,16 @@ public class Game {
     {
         if (!command.hasSecondWord())
         {
-            // if there is no second word, we don't know what to take...
+            // if there is no second word, we don't know what to drop...
             System.out.println("Drop what?");
             return;
         }
         String item = command.getSecondWord();
         player.dropItem(item);
+    }
+
+    private void items()
+    {
+        System.out.println(player.displayItems());
     }
 }

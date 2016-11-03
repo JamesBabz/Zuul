@@ -53,7 +53,7 @@ public class Room {
         return exits.get(direction);
     }
     
-     void addItem(Item item)
+    void addItem(Item item)
     {
         items.add(item);
     }

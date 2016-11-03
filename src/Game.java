@@ -27,8 +27,8 @@ public class Game {
     private Room lastRoom;
     private Stack<Room> backList;
     private Player player;
-    Item club, axe, rareClub, cookie;
-    Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
+    private Item club, axe, rareClub, cookie;
+    private Room town, wilderness1, wilderness2, wilderness3, wilderness4, wilderness5, wilderness6, denOutside, denInside, cave1, cave2, cave3, cave4, cave5, cave6, chestRoom;
 
     /**
      * Create the game and initialise its internal map.
